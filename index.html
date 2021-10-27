@@ -1,14 +1,59 @@
 <html>
   <head>
+    <title>360° Image Browser</title>
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <script src="https://unpkg.com/aframe-template-component@3.x.x/dist/aframe-template-component.min.js"></script>
+    <script src="https://unpkg.com/aframe-layout-component@4.x.x/dist/aframe-layout-component.min.js"></script>
+    <script src="https://unpkg.com/aframe-event-set-component@5.x.x/dist/aframe-event-set-component.min.js"></script>
+   
+    <script id="link" type="text/html">
+      <a-entity class="link"
+        geometry="primitive: plane; height: 1; width: 1"
+        material="shader: flat; src: ${thumb}"
+        sound="on: click; src: #click-sound"
+        event-set__mouseenter="scale: 1.2 1.2 1"
+        event-set__mouseleave="scale: 1 1 1"
+        event-set__click="_target: #image-360; _delay: 300; material.src: ${src}"
+        proxy-event="event: click; to: #image-360; as: fade"></a-entity>
+    </script>
   </head>
   <body>
     <a-scene>
-      <a-box position="-1 0.5 -3" rotation="0 45 0" color="#4CC3D9"></a-box>
-      <a-sphere position="0 1.25 -5" radius="1.25" color="#EF2D5E"></a-sphere>
-      <a-cylinder position="1 0.75 -3" radius="0.5" height="1.5" color="#FFC65D"></a-cylinder>
-      <a-plane position="0 0 -4" rotation="-90 0 0" width="4" height="4" color="#7BC8A4"></a-plane>
-      <a-sky color="#ECECEC"></a-sky>
+      <a-assets>
+        <audio id="click-sound" src="https://cdn.aframe.io/360-image-gallery-boilerplate/audio/click.ogg"></audio>
+    
+        <!-- Images. -->
+        <img id="garden-01" src="https://cdn.glitch.me/e8a1df3c-6c9a-4c1f-91fc-b2d9230057a0%2FPXL_20210320_094848113.PHOTOSPHERE.jpg?v=1635353615643">
+        <img id="garden-02" src="https://cdn.glitch.me/e8a1df3c-6c9a-4c1f-91fc-b2d9230057a0%2FPXL_20210321_140832947.PHOTOSPHERE.jpg?v=1635353654818">
+        <img id="garden-03" src="https://cdn.glitch.me/e8a1df3c-6c9a-4c1f-91fc-b2d9230057a0%2FPXL_20210417_175828408.PHOTOSPHERE.jpg?v=1635353660919">
+        <img id="garden-04" src="https://cdn.glitch.me/e8a1df3c-6c9a-4c1f-91fc-b2d9230057a0%2FPXL_20210402_172139204.PHOTOSPHERE.jpg?v=1635353661182">
+        <!-- <img id="garden-05" src="">
+        <img id="garden-06" src="">
+        <img id="garden-07" src="">
+        <img id="garden-08" src="">
+        <img id="garden-09" src="">
+        <img id="garden-10" src="">
+        <img id="garden-11" src="">
+        <img id="garden-12" src="">
+        <img id="garden-13" src="">
+        <img id="garden-14" src="">
+        <img id="garden-15" src=""> -->
+      </a-assets>
+
+      <!-- 360-degree image. -->
+      <a-sky
+        id="image-360" radius="10" src="#garden-01"
+        animation__fade="property: components.material.material.color; type: color; from: #FFF; to: #000; dur: 300; startEvents: fade"
+        animation__fadeback="property: components.material.material.color; type: color; from: #000; to: #FFF; dur: 300; startEvents: animationcomplete__fade"></a-sky>
+    
+      <!-- Camera + Cursor. -->
+      <a-camera>
+        <a-cursor
+          id="cursor"
+          animation__click="property: scale; from: 0.1 0.1 0.1; to: 1 1 1; easing: easeInCubic; dur: 150; startEvents: click"
+          animation__clickreset="property: scale; to: 0.1 0.1 0.1; dur: 1; startEvents: animationcomplete__click"
+          animation__fusing="property: scale; from: 1 1 1; to: 0.1 0.1 0.1; easing: easeInCubic; dur: 150; startEvents: fusing"></a-cursor>
+      </a-camera>
     </a-scene>
   </body>
 </html>
